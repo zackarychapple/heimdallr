@@ -43,6 +43,7 @@
      */
     heiSvc.sendStats = function (callback) {
       if (angular.isDefined(HeimdallrService.url)) {
+        heiSvc.updateRum();
         var sent = $http.post('/monitoring/perf', heiSvc.rum, performance.clearMarks("Start:/monitoring/perf"));
         sent.then(callback).finally(function () {
           performance.clearMeasures();
@@ -74,6 +75,17 @@
       heiSvc.customEventArray.push(name);
     };
 
+    heiSvc.updateRum = function () {
+      heiSvc.rum = {
+        _angularVersion: angular.version,
+        _watcherCount: $rootScope.$$watchersCount,
+        _customAttributes: {},
+        _navigation: performance.timing,
+        _resources: performance.getEntriesByType('resource'),
+        _marks: performance.getEntriesByType('mark'),
+        _measures: performance.getEntriesByType('measure')
+      }
+    };
     heiSvc.measure = function (lable, startMark, endMark, remove) {
       try {
         performance.measure(lable, startMark, endMark);
@@ -174,7 +186,7 @@
       }
     };
 
-    $interval(HeimdallrService.sendStats, heiSvc.interval);
+    $interval(heiSvc.sendStats, heiSvc.interval);
   }]);
 
   HeimdallrService.provider('Heimdallr', ['$provide', '$httpProvider', function ($provide, $httpProvider) {

@@ -4,6 +4,9 @@
   "authors": [
     "Zackary Chapple"
   ],
+  "main": [
+    "./dist/heimdallr.js"
+  ],
   "license": "MIT",
   "keywords": [
     "angular",
