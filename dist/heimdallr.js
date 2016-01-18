@@ -42,9 +42,9 @@
      * @callback {function} - used as a callback after the send promise is returned
      */
     heiSvc.sendStats = function (callback) {
-      if (angular.isDefined(HeimdallrService.url)) {
+      if (angular.isDefined(heiSvc.url)) {
         heiSvc.updateRum();
-        var sent = $http.post('/monitoring/perf', heiSvc.rum, performance.clearMarks("Start:/monitoring/perf"));
+        var sent = $http.post(heiSvc.url, heiSvc.rum, performance.clearMarks("Start:/monitoring/perfmon"));
         sent.then(callback).finally(function () {
           performance.clearMeasures();
           performance.clearResourceTimings();
@@ -140,7 +140,7 @@
           $log.debug(errorMsg.urlMissing);
         }
       } else {
-        HeimdallrService.url = config.url;
+        heiSvc.url = config.url;
       }
       if (angular.isDefined(config.interval)) {
         heiSvc.interval = config.interval;
