@@ -1,0 +1,23 @@
+{
+  "name": "heimdallr",
+  "description": "Performance monitoring tool for angular based applications",
+  "authors": [
+    "Zackary Chapple"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "angular",
+    "angular2",
+    "monitoring",
+    "performance"
+  ],
+  "homepage": "https://github.com/zackarychapple/heimdallr",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "version": "0.0.2"
+}
