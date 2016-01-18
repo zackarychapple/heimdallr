@@ -7,8 +7,8 @@ By default Heimdallr tracks useful information and submits data every 10s:
 * Custom events
 
 ## Compatibility ##
-Angular 1.4.x
-Routers: ui.router
+* Angular 1.4+ (tested on 1.4.7 & 1.4.8)
+* Routers: ui.router
 
 ## Setup ##
 Add Module to your application.
@@ -52,4 +52,18 @@ endFunction = function(){
 Calculate the measurement: (title, start, end, remove after submit).  After measurement is calculated data will be submitted immediately. 
 ```javascript
   HeimdallrService.measure("SomeTitle", 'event1', 'event2', true);
+```
+
+## Troubleshooting ##
+Enabling debug will enable console error messages. 
+```javascript
+myApp.run(['HeimdallrService', function(HeimdallrService){
+    HeimdallrService.init({
+          debug: true,
+          url: '/monitoring/perf',
+          customProperties: {
+            app: appConstant
+          }
+        });
+}]);
 ```
