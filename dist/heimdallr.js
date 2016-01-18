@@ -57,6 +57,7 @@
      * @type {{_angularVersion: {major: number}, _watcherCount: (number|*|b), _guid: null, _navigation: *, _resources: *, _marks: *, _measures: *}}
      */
     heiSvc.rum = {
+      time: new Date(Date.now()),
       _angularVersion: angular.version,
       _watcherCount: $rootScope.$$watchersCount,
       _guid: null,
@@ -77,6 +78,7 @@
 
     heiSvc.updateRum = function () {
       heiSvc.rum = {
+        time: new Date(Date.now()),
         _angularVersion: angular.version,
         _watcherCount: $rootScope.$$watchersCount,
         _customAttributes: {},
