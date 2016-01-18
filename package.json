@@ -1,0 +1,21 @@
+{
+  "name": "heimdallr",
+  "version": "0.0.1",
+  "description": "Performance monitoring tool for angular based applications",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zackarychapple/heimdallr.git"
+  },
+  "keywords": [
+    "angular",
+    "angular2",
+    "monitoring",
+    "performance"
+  ],
+  "author": "Zackary Chapple",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zackarychapple/heimdallr/issues"
+  },
+  "homepage": "https://github.com/zackarychapple/heimdallr#readme"
+}

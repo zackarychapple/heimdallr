@@ -1,2 +1,55 @@
-# heimdallr
-Performance monitoring for ng2 
+#[Heimdallr](https://github.com/zackarychapple/heimdallr)
+Performance monitoring for Angular applications.  
+By default Heimdallr tracks useful information and submits data every 10s:
+* Angular app information (Version number and such)
+* WatcherCount 
+* ui.router state changes
+* Custom events
+
+## Compatibility ##
+Angular 1.4.x
+Routers: ui.router
+
+## Setup ##
+Add Module to your application.
+```javascript
+var myApp = angular.module('yourApp',['HeimdallrService']);
+```
+
+Heimdallr needs to hook into http requests in order to provide accurate timings for http requests.  
+```javascript
+myApp.config(['HeimdallrProvider', function(HeimdallrProvider){
+  HeimdallrProvider.$get().bindHttp();
+}]);
+```
+
+Starting the Heimdallr service requires that you put in a URL as the destination for your performance metrics.  Any number of custom attributes can be set on the `customProperties` object. 
+```javascript
+myApp.run(['HeimdallrService', function(HeimdallrService){
+    HeimdallrService.init({
+          url: '/monitoring/perf',
+          customProperties: {
+            app: appConstant
+          }
+        });
+}]);
+```
+
+Custom events are easily added.   
+```javascript
+beginningFunction = function(){
+  HeimdallrService.addEvent('event1');
+}
+```
+
+Add a second event.
+```javascript
+endFunction = function(){
+  HeimdallrService.addEvent('event2');
+}
+```
+
+Calculate the measurement: (title, start, end, remove after submit).  After measurement is calculated data will be submitted immediately. 
+```javascript
+  HeimdallrService.measure("SomeTitle", 'event1', 'event2', true);
+```
