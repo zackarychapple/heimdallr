@@ -1,5 +1,6 @@
 #[Heimdallr](https://github.com/zackarychapple/heimdallr)
 [![MIT license](http://img.shields.io/badge/license-MIT-brightgreen.svg)](http://opensource.org/licenses/MIT)
+
 Performance monitoring for Angular applications.  
 By default Heimdallr tracks useful information and submits data every 10s:
 * Angular app information (Version number and such)
