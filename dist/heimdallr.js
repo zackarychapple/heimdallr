@@ -20,7 +20,7 @@
     };
 
     heiSvc.append = function (attr, value) {
-      heiSvc.rum._customAttributes[attr] = value;
+      heiSvc.rum.customProperties[attr] = value;
     };
 
     /**
@@ -32,7 +32,7 @@
     heiSvc.appendAndSend = function (attr, value, remove) {
       heiSvc.append(attr, value);
       var deleteAfterSend = function () {
-        delete heiSvc.rum._customAttributes[attr];
+        delete heiSvc.rum.customProperties[attr];
       };
       heiSvc.sendStats(remove ? deleteAfterSend : null);
     };
@@ -44,7 +44,7 @@
     heiSvc.sendStats = function (callback) {
       if (angular.isDefined(heiSvc.url)) {
         heiSvc.updateRum();
-        var sent = $http.post(heiSvc.url, heiSvc.rum, performance.clearMarks("Start:/monitoring/perfmon"));
+        var sent = $http.post(heiSvc.url, heiSvc.rum, performance.clearMarks("Start:" + heiSvc.url));
         sent.then(callback).finally(function () {
           performance.clearMeasures();
           performance.clearResourceTimings();
@@ -54,18 +54,28 @@
 
     /**
      * Default object for sending performance data.
-     * @type {{_angularVersion: {major: number}, _watcherCount: (number|*|b), _guid: null, _navigation: *, _resources: *, _marks: *, _measures: *}}
+     * @type {{angularVersion: {major: number}, watcherCount: (number|*|b), guid: null, navigation: *, resources: *, marks: *, measures: *}}
      */
     heiSvc.rum = {
       time: new Date(Date.now()),
-      _angularVersion: angular.version,
-      _watcherCount: $rootScope.$$watchersCount,
-      _guid: null,
-      _customAttributes: {},
-      _navigation: performance.timing,
-      _resources: performance.getEntriesByType('resource'),
-      _marks: performance.getEntriesByType('mark'),
-      _measures: performance.getEntriesByType('measure')
+      location: {
+        href: window.location.href,
+        hash: window.location.hash,
+        hostname: window.location.hostname
+      },
+      angularVersion: angular.version,
+      watcherCount: $rootScope.$$watchersCount,
+      guid: null,
+      customProperties: {},
+      navigation: performance.timing,
+      resources: performance.getEntriesByType('resource'),
+      marks: performance.getEntriesByType('mark'),
+      measures: performance.getEntriesByType('measure'),
+      memory: {
+        jsHeapSizeLimit: performance.memory.jsHeapSizeLimit,
+        totalJSHeapSize: performance.memory.totalJSHeapSize,
+        usedJSHeapSize: performance.memory.usedJSHeapSize
+      }
     };
     heiSvc.interval = 10000; //default;
     heiSvc.routeEventArray = [];
@@ -77,15 +87,19 @@
     };
 
     heiSvc.updateRum = function () {
-      heiSvc.rum = {
-        time: new Date(Date.now()),
-        _angularVersion: angular.version,
-        _watcherCount: $rootScope.$$watchersCount,
-        _customAttributes: {},
-        _navigation: performance.timing,
-        _resources: performance.getEntriesByType('resource'),
-        _marks: performance.getEntriesByType('mark'),
-        _measures: performance.getEntriesByType('measure')
+      heiSvc.rum.time = new Date(Date.now());
+      heiSvc.watcherCount = $rootScope.$$watchersCount;
+      heiSvc.navigation = performance.timing;
+      heiSvc.resources = performance.getEntriesByType('resource');
+      heiSvc.marks = performance.getEntriesByType('mark');
+      heiSvc.measures = performance.getEntriesByType('measure');
+      heiSvc.memory = {
+        jsHeapSizeLimit: performance.memory.jsHeapSizeLimit,
+        totalJSHeapSize: performance.memory.totalJSHeapSize,
+        usedJSHeapSize: performance.memory.usedJSHeapSize
+      };
+      if (heiSvc.routeEventArray.length > 0) {
+        heiSvc.rum.routeEvents = heiSvc.routeEventArray
       }
     };
     heiSvc.measure = function (lable, startMark, endMark, remove) {
@@ -99,6 +113,33 @@
       } catch (error) {
         $log.debug(errorMsg.measureMissing + error)
       }
+    };
+
+    heiSvc.performanceTest = function (testCount) {
+      var testLength = 0;
+      var resultSpeedTotal = 0;
+      if (performance.getEntries().length > testCount) {
+        testLength = testCount;
+      } else {
+        console.log('test count is less than entry count');
+        testLength = performance.getEntries().length
+      }
+      for (var i = 0; i < testLength; i++) {
+        var file = performance.getEntries()[i];
+        var url = file.name;
+        var http = new XMLHttpRequest();
+        http.open('HEAD', url, false);
+        http.send(null);
+        if (http.status === 200) {
+          var fileSize = parseInt(http.getResponseHeader('content-length'));
+          if (fileSize > 1024) {
+            var kb = fileSize / 1024;
+            resultSpeedTotal += ( (kb / 1024) / (file.duration / 1000 / 1000));
+          }
+        }
+      }
+      heiSvc.downloadSpeed = (resultSpeedTotal / testLength);
+      heiSvc.downloadSpeedUnit = "mb/s";
     };
 
     /**
@@ -117,9 +158,9 @@
         $log.debugEnabled(true)
       }
       if (angular.isDefined(config.guid)) {
-        heiSvc.rum._guid = config.guid;
+        heiSvc.rum.guid = config.guid;
       } else {
-        heiSvc.rum._guid = (S4() + S4() + "-" + S4() + "-4" + S4().substr(0, 3) + "-" + S4() + "-" + S4() + S4() + S4()).toLowerCase();
+        heiSvc.rum.guid = (S4() + S4() + "-" + S4() + "-4" + S4().substr(0, 3) + "-" + S4() + "-" + S4() + S4() + S4()).toLowerCase();
       }
 
       if (angular.isDefined(config.customProperties)) {
@@ -136,9 +177,7 @@
       }
 
       if (angular.isUndefined(config.url)) {
-        if (config.debug === true) {
-          $log.debug(errorMsg.urlMissing);
-        }
+        $log.debug(errorMsg.urlMissing);
       } else {
         heiSvc.url = config.url;
       }
