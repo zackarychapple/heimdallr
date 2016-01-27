@@ -64,6 +64,7 @@
         hostname: window.location.hostname
       },
       angularVersion: angular.version,
+      userAgent: navigator.userAgent,
       watcherCount: $rootScope.$$watchersCount,
       guid: null,
       customProperties: {},
@@ -118,6 +119,8 @@
     heiSvc.performanceTest = function (testCount) {
       var testLength = 0;
       var resultSpeedTotal = 0;
+      var host = window.location.host;
+      var protocol = window.location.protocol;
       if (performance.getEntries().length > testCount) {
         testLength = testCount;
       } else {
@@ -127,19 +130,23 @@
       for (var i = 0; i < testLength; i++) {
         var file = performance.getEntries()[i];
         var url = file.name;
-        var http = new XMLHttpRequest();
-        http.open('HEAD', url, false);
-        http.send(null);
-        if (http.status === 200) {
-          var fileSize = parseInt(http.getResponseHeader('content-length'));
-          if (fileSize > 1024) {
-            var kb = fileSize / 1024;
-            resultSpeedTotal += ( (kb / 1024) / (file.duration / 1000 / 1000));
+        var urlParser = document.createElement('a');
+        urlParser.href = file.name;
+        if (urlParser.host == host && urlParser.protocol == protocol) {
+          var http = new XMLHttpRequest();
+          http.open('HEAD', url, false);
+          http.send(null);
+          if (http.status === 200) {
+            var fileSize = parseInt(http.getResponseHeader('content-length'));
+            if (fileSize > 1024) {
+              var kb = fileSize / 1024;
+              resultSpeedTotal += ( (kb / 1024) / (file.duration / 1000 / 1000));
+            }
           }
         }
       }
-      heiSvc.downloadSpeed = (resultSpeedTotal / testLength);
-      heiSvc.downloadSpeedUnit = "mb/s";
+      heiSvc.rum.downloadSpeed = Math.round((resultSpeedTotal / testLength));
+      heiSvc.rum.downloadSpeedUnit = "mb/s";
     };
 
     /**
