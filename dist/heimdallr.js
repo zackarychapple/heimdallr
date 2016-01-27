@@ -7,7 +7,8 @@
       measureMissing: "HeimdallrSvc: One of the measure marks is missing: ",
       noUiRouter: "HeimdallrSvc: ui.router not in use",
       duplicateRum: 'HeimdallrSvc: Property not added, duplicate key exists on rum object',
-      urlMissing: 'HeimdallrSvc: URL not specified stats will not be sent'
+      urlMissing: 'HeimdallrSvc: URL not specified stats will not be sent',
+      testCount: 'test count is less than entry count'
     };
 
     var heiSvc = this;
@@ -124,7 +125,7 @@
       if (performance.getEntries().length > testCount) {
         testLength = testCount;
       } else {
-        console.log('test count is less than entry count');
+        $log.debug(errorMsg.testCount);
         testLength = performance.getEntries().length
       }
       for (var i = 0; i < testLength; i++) {
