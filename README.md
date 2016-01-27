@@ -34,6 +34,8 @@ myApp.run(['HeimdallrService', function(HeimdallrService){
             app: appConstant
           }
         });
+    HeimdallrService.bindRoutingEvents(); // Binds routing events for ui.router
+    HeimdallrService.performanceTest(); // Does performance test to establish bandwidth 
 }]);
 ```
 
