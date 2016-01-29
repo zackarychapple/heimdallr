@@ -5,7 +5,7 @@
     "Zackary Chapple"
   ],
   "main": [
-    "./dist/heimdallr.js"
+    "./dist/heimdallr.min.js"
   ],
   "license": "MIT",
   "keywords": [

@@ -246,7 +246,7 @@
     };
 
     var setupHttpInterceptor = function () {
-      $provide.factory('httpInterceptor', function ($q) {
+      $provide.factory('httpInterceptor', ['$q', function ($q) {
         return {
           'request': function (config) {
             performance.mark('Start:' + config.url);
@@ -284,7 +284,7 @@
             return $q.reject(rejection);
           }
         };
-      });
+      }]);
       $httpProvider.interceptors.push('httpInterceptor');
     };
     return {
