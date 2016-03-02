@@ -12,6 +12,9 @@
     "monitoring",
     "performance"
   ],
+  "scripts": {
+    "postinstall": "typings install --ambient"
+  },
   "author": "Zackary Chapple",
   "license": "MIT",
   "bugs": {
@@ -19,10 +22,48 @@
   },
   "homepage": "https://github.com/zackarychapple/heimdallr#readme",
   "dependencies": {
-    "grunt": "^0.4.5"
+    "angular2": "2.0.0-beta.7",
+    "bower": "^1.7.7",
+    "es6-promise": "^3.0.2",
+    "es6-shim": "^0.34.4",
+    "reflect-metadata": "0.1.3",
+    "rxjs": "5.0.0-beta.2",
+    "systemjs": "0.19.22",
+    "zone.js": "^0.5.15",
+    "grunt": "^0.4.5",
+    "typescript": "^1.8.2",
+    "typings": "^0.6.8"
   },
   "devDependencies": {
-    "grunt-contrib-uglify": "^0.11.0",
-    "grunt-ng-annotate": "^1.0.1"
+    "angular-cli": "0.0.*",
+    "angular-cli-github-pages": "^0.2.0",
+    "del": "^2.2.0",
+    "ember-cli-inject-live-reload": "^1.3.0",
+    "glob": "^7.0.0",
+    "gulp": "^3.9.0",
+    "gulp-concat": "^2.5.2",
+    "gulp-cssnano": "^2.0.0",
+    "gulp-debug": "^2.1.2",
+    "gulp-filter": "^3.0.1",
+    "gulp-inject": "^3.0.0",
+    "gulp-inline-ng2-template": "^0.0.11",
+    "gulp-less": "^3.0.5",
+    "gulp-load-plugins": "^1.2.0",
+    "gulp-plumber": "~1.1.0",
+    "gulp-shell": "~0.5.2",
+    "gulp-sourcemaps": "~1.6.0",
+    "gulp-template": "^3.0.0",
+    "gulp-tslint": "^4.3.2",
+    "gulp-tslint-stylish": "^1.0.4",
+    "gulp-typescript": "~2.11.0",
+    "gulp-uglify": "^1.2.0",
+    "gulp-util": "^3.0.7",
+    "gulp-watch": "^4.2.4",
+    "jasmine-core": "^2.3.4",
+    "karma": "^0.13.15",
+    "karma-chrome-launcher": "^0.2.1",
+    "karma-firefox-launcher": "^0.1.7",
+    "karma-jasmine": "^0.3.6",
+    "protractor": "^3.0.0"
   }
 }
