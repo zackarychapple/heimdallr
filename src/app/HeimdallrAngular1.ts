@@ -3,15 +3,14 @@ import {HeimdallrProvider} from "./HeimdallrProvider";
 let HeimdallrService = angular.module('HeimdallrService', []);
 
 HeimdallrService.service('HeimdallrService', ['$rootScope', ($rootScope)=> {
-  let heimdallr = new Heimdallr();
-  let watcherCheck = function(){
-    heimdallr.append('watcherCount', $rootScope.$$watchersCount);
-    heimdallr.append('angularVersion', angular.version.full);
-  };
-  
-  heimdallr.injectible([watcherCheck]);
+  Object.assign(this, new Heimdallr());
 
-  return heimdallr;
+  let watcherCheck = function(){
+    this.append('watcherCount', $rootScope.$$watchersCount);
+    this.append('angularVersion', angular.version.full);
+  };
+
+  this.injectible([watcherCheck]);
 }]);
 
 HeimdallrService.provider('Heimdallr', ['$provide', '$httpProvider', function ($provide, $httpProvider) {
@@ -19,7 +18,7 @@ HeimdallrService.provider('Heimdallr', ['$provide', '$httpProvider', function ($
 
   return {
     $get(){
-      heimdallr
+      return heimdallr
     }
   }
 }]);
