@@ -1,14 +1,16 @@
 import {BrowserPerformance} from "./BrowserPerformance";
 export class HeimdallrProvider {
+  p:ng.IServiceProviderFactory;
+  hp:ng.IHttpProvider;
 
   bindHttp() {
     this.setupHttpInterceptor();
   };
 
   setupHttpInterceptor() {
-    $provide.factory('httpInterceptor', ['$q', function ($q) {
+    this.p.factory('httpInterceptor', ['$q', function ($q) {
       let bp:BrowserPerformance = new BrowserPerformance();
-      
+
       return {
         'request': function (config) {
           bp.mark('Start:' + config.url);
@@ -47,10 +49,11 @@ export class HeimdallrProvider {
         }
       };
     }]);
-    $httpProvider.interceptors.push('httpInterceptor');
+    this.hp.interceptors.push('httpInterceptor');
   };
 
-  $get() {
-    return this
+  constructor(provider, httpProvider) {
+    this.p = provider;
+    this.hp = httpProvider;
   }
 }

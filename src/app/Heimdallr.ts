@@ -15,13 +15,14 @@ export class ConfigObj {
 export class Heimdallr {
   bp:BrowserPerformance = new BrowserPerformance();
   customEventArray:Array<string> = [];
+  customFunctions:Array<Function> = [];
   msg:HeimdallrErrors = new HeimdallrErrors();
   http:HeimdallrHttp = new HeimdallrHttp();
   intervalTime:number = 10000;
   rumData:PerformanceObject = new PerformanceObject();
   routeEventsArray:Array<String> = [];
   url:string = '';
-  router: HeimdallrRouterBase;
+  router:HeimdallrRouterBase;
 
   addEvent(name:string) {
     this.bp.mark(name);
@@ -40,6 +41,10 @@ export class Heimdallr {
     if (this.url !== '') {
       this.sendStats(remove ? deleteAfterSend : null);
     }
+  }
+
+  injectible(funcs:[Function]) {
+    this.customFunctions.push(...funcs)
   }
 
   interval() {
@@ -68,7 +73,7 @@ export class Heimdallr {
         }
       }
     }
-    
+
     setTimeout(this.interval, this.intervalTime)
   }
 
@@ -119,6 +124,9 @@ export class Heimdallr {
   }
 
   updateRum() {
+    this.customFunctions.forEach((func)=> {
+      func();
+    });
     this.rumData.time = new Date(Date.now());
     this.rumData.location = {
       href: window.location.href,
@@ -139,5 +147,6 @@ export class Heimdallr {
     if (this.routeEventsArray.length > 0) {
       this.rumData.routeEvents = this.routeEventsArray;
     }
+    this.rumData.userAgent = navigator.userAgent;
   }
 }

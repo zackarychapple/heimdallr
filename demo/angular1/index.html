@@ -15,9 +15,19 @@
 
 <script src="https://code.angularjs.org/1.5.0/angular.min.js"></script>
 <script src="https://code.angularjs.org/1.5.0/angular-route.min.js"></script>
-<script src="../../src/app/Heimdallr.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/0.19.22/system.js"></script>
 <script src="app.js"></script>
 <script src="view1/view1.js"></script>
+
+<script>
+
+  System.config({
+    baseURL: '../../src/app',
+    defaultJSExtensions: true
+  });
+
+  System.import('HeimdallrAngular1');
+</script>
 
 </body>
 </html>
