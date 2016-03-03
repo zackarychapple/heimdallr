@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "ES5",
     "module": "system",
     "declaration": false,
     "noImplicitAny": false,
@@ -8,10 +8,11 @@
     "noLib": false,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "sourceRoot": "/src"
   },
   "exclude": [
-    "node_modules"
-  ],
-  "compileOnSave": false
+    "node_modules",
+    "typings"
+  ]
 }

@@ -95,7 +95,7 @@ export class Heimdallr {
     let resultSpeedTotal:number = 0;
     let host:string = window.location.host;
     let protocol:string = window.location.protocol;
-    let entries:Array<Object> = this.bp.getEntries();
+    let entries:Array<any> = this.bp.getEntries();
     let speedTotal:number = 0;
 
     if (entries.length > testCount) {
