@@ -22,13 +22,12 @@
 <script>
 
   System.config({
-    baseURL: '../../src/app',
     defaultJSExtensions: true,
     depCache: {
-      'bootstrap': ['app2']
+      'bootstrap': ['../../src/app/app2']
     }
   });
-  System.import('HeimdallrAngular1').then(function () {
+  System.import('../../src/app/HeimdallrAngular1').then(function () {
     System.import('bootstrap').then(function () {
     });
   });
