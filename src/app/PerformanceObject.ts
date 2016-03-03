@@ -1,3 +1,5 @@
+import {Guid} from './Guid';
+
 export class PerformanceObject {
   angularVersion:string = '';
   customProperties:Object = {};

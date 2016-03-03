@@ -6,17 +6,15 @@ angular.module('myApp', [
     'myApp.view1',
     'HeimdallrService'
   ])
-  .config(['$routeProvider', 'HeimdallrProvider', function ($routeProvider, HeimdallrProvider) {
-    HeimdallrProvider.$get().bindHttp();
-    $routeProvider.otherwise({redirectTo: '/view1'});
-  }])
+  // .config(['$routeProvider', 'HeimdallrProvider', function ($routeProvider, HeimdallrProvider) {
+  //   HeimdallrProvider.$get().bindHttp();
+  //   $routeProvider.otherwise({redirectTo: '/view1'});
+  // }])
   .run(['HeimdallrService', function (HeimdallrService) {
     HeimdallrService.init({
       url: '/monitoring/perf',
-      customProperties: {
-        app: appConstant
-      }
+      customProperties: {}
     });
-    HeimdallrService.bindRoutingEvents(); 
+    // HeimdallrService.bindRoutingEvents(); 
     HeimdallrService.performanceTest(); 
   }]);

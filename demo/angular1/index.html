@@ -4,7 +4,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Angular1 Heimdallr Example</title>
 </head>
-<html lang="en" ng-app="myApp" class="no-js">
+<html lang="en" class="no-js">
 <body>
 <ul class="menu">
   <li><a href="#/view1">view1</a></li>
@@ -23,10 +23,15 @@
 
   System.config({
     baseURL: '../../src/app',
-    defaultJSExtensions: true
+    defaultJSExtensions: true,
+    depCache: {
+      'bootstrap': ['app2']
+    }
   });
-
-  System.import('HeimdallrAngular1');
+  System.import('HeimdallrAngular1').then(function () {
+    System.import('bootstrap').then(function () {
+    });
+  });
 </script>
 
 </body>

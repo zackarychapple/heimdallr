@@ -3,6 +3,7 @@ import {BrowserPerformance} from "./BrowserPerformance";
 import {HeimdallrHttp} from "./HeimdallrHttp";
 import {HeimdallrErrors} from "./HeimdallrErrors";
 import {HeimdallrUiRouter, HeimdallrRouterBase} from "./HeimdallrUiRouter";
+import {Guid} from './Guid';
 
 export class ConfigObj {
   guid:Guid;
@@ -48,8 +49,9 @@ export class Heimdallr {
   }
 
   interval() {
-    this.sendStats();
-    setTimeout(this.interval, this.intervalTime)
+    setInterval(()=> {
+      this.sendStats();
+    }, this.intervalTime);
   }
 
   init(config:ConfigObj) {
@@ -73,8 +75,7 @@ export class Heimdallr {
         }
       }
     }
-
-    setTimeout(this.interval, this.intervalTime)
+    this.interval();
   }
 
   measure(lable:string, startMark:string, endMark:string, remove:boolean) {
