@@ -1,16 +1,16 @@
 import {HeimdallrErrors} from "./HeimdallrErrors";
-export class HeimdallrRouterBase {
-  routeEventArray:Array<Object> = [];
+import {RouteEvent} from "./RouteEvent";
+
+export class HeimdallrUiRouter {
+  routeEventArray:Array<RouteEvent> = [];
   sendEvent:Function;
   errorMsg:HeimdallrErrors;
-  $rootScope: ng.IRootScopeService
-}
+  $rootScope:ng.IRootScopeService;
 
-export class HeimdallrUiRouter extends HeimdallrRouterBase  {
   bindRoutingEvents() {
     try {
       if (typeof angular.module('ui.router') !== 'undefined') {
-        this.$rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
+        this.$rootScope.$on('$stateChangeStart', (event, toState, toParams, fromState, fromParams) => {
           let now = new Date(Date.now()).getTime().toString();
           this.routeEventArray.push({
             'event': now,
@@ -21,7 +21,7 @@ export class HeimdallrUiRouter extends HeimdallrRouterBase  {
           });
           performance.mark(now);
         });
-        this.$rootScope.$on('$viewContentLoaded', function () {
+        this.$rootScope.$on('$viewContentLoaded', ()=> {
           let now = new Date(Date.now()).getTime().toString();
           performance.mark(now);
           if (this.routeEventArray.length > 1) {
@@ -35,7 +35,7 @@ export class HeimdallrUiRouter extends HeimdallrRouterBase  {
             }
             performance.clearMarks(eventStamp)
           }
-          this.appendAndSend("currentView", toName)
+          this.sendEvent("currentView", toName)
         })
       }
     } catch (error) {
@@ -43,10 +43,11 @@ export class HeimdallrUiRouter extends HeimdallrRouterBase  {
     }
   }
 
-  constructor(routeEventArray:Array<Object>, sendEvent:Function, messages:HeimdallrErrors) {
+  constructor(routeEventArray:Array<RouteEvent>, sendEvent:Function, messages:HeimdallrErrors, $rootScope:ng.IRootScopeService) {
     this.errorMsg = messages;
     this.routeEventArray = routeEventArray;
     this.sendEvent = sendEvent;
+    this.$rootScope = $rootScope;
     this.bindRoutingEvents();
   }
 }

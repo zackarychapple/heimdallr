@@ -2,6 +2,7 @@ import {Heimdallr} from "./Heimdallr";
 import {HeimdallrProvider} from "./HeimdallrProvider";
 let HeimdallrService = angular.module('HeimdallrService', []);
 
+Heimdallr.$inject = ["$rootScope"];
 HeimdallrService.service('HeimdallrService', Heimdallr);
 
 HeimdallrService.provider('Heimdallr', ['$provide', '$httpProvider', function ($provide, $httpProvider) {

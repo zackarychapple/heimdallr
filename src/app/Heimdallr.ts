@@ -2,8 +2,9 @@ import {PerformanceObject} from "./PerformanceObject";
 import {BrowserPerformance} from "./BrowserPerformance";
 import {HeimdallrHttp} from "./HeimdallrHttp";
 import {HeimdallrErrors} from "./HeimdallrErrors";
-import {HeimdallrUiRouter, HeimdallrRouterBase} from "./HeimdallrUiRouter";
+import {HeimdallrUiRouter} from "./HeimdallrUiRouter";
 import {Guid} from './Guid';
+import {RouteEvent} from "./RouteEvent";
 
 export class ConfigObj {
   guid:Guid;
@@ -21,9 +22,14 @@ export class Heimdallr {
   http:HeimdallrHttp = new HeimdallrHttp();
   intervalTime:number = 10000;
   rumData:PerformanceObject = new PerformanceObject();
-  routeEventsArray:Array<String> = [];
+  routeEventsArray:Array<RouteEvent> = [];
   url:string = '';
   router:any;
+  $rootScope:ng.IRootScopeService;
+
+  constructor($rootScope:ng.IRootScopeService) {
+    this.$rootScope = $rootScope;
+  }
 
   addEvent(name:string) {
     this.bp.mark(name);
@@ -31,6 +37,7 @@ export class Heimdallr {
   }
 
   append(attr:string, value:string) {
+    debugger
     this.rumData.customProperties[attr] = value;
   }
 
@@ -57,7 +64,7 @@ export class Heimdallr {
   init(config:ConfigObj) {
     this.url = config.url;
     if (config.router == 'ui.router') {
-      this.router = new HeimdallrUiRouter(this.routeEventsArray, this.appendAndSend, this.msg);
+      this.router = new HeimdallrUiRouter(this.routeEventsArray, this.appendAndSend, this.msg, this.$rootScope);
     }
     if (config.intervalTime) {
       this.intervalTime = config.intervalTime;

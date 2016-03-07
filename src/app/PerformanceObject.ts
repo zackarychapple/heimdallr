@@ -1,4 +1,5 @@
 import {Guid} from './Guid';
+import {RouteEvent} from "./RouteEvent";
 
 export class PerformanceObject {
   angularVersion:string = '';
@@ -12,7 +13,7 @@ export class PerformanceObject {
   memory:Object = {};
   navigation:Object = {};
   resources:Array<Object> = [];
-  routeEvents:Array<String> = [];
+  routeEvents:Array<RouteEvent> = [];
   time:Date;
   userAgent:string = '';
   watcherCount:number = 0;
