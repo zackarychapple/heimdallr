@@ -23,7 +23,7 @@ export class Heimdallr {
   rumData:PerformanceObject = new PerformanceObject();
   routeEventsArray:Array<String> = [];
   url:string = '';
-  router:HeimdallrRouterBase;
+  router:any;
 
   addEvent(name:string) {
     this.bp.mark(name);
@@ -56,7 +56,7 @@ export class Heimdallr {
 
   init(config:ConfigObj) {
     this.url = config.url;
-    if (config.router == 'ui-router') {
+    if (config.router == 'ui.router') {
       this.router = new HeimdallrUiRouter(this.routeEventsArray, this.appendAndSend, this.msg);
     }
     if (config.intervalTime) {
