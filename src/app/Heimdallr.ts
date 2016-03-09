@@ -37,7 +37,6 @@ export class Heimdallr {
   }
 
   append(attr:string, value:string) {
-    debugger
     this.rumData.customProperties[attr] = value;
   }
 
@@ -64,7 +63,7 @@ export class Heimdallr {
   init(config:ConfigObj) {
     this.url = config.url;
     if (config.router == 'ui.router') {
-      this.router = new HeimdallrUiRouter(this.routeEventsArray, this.appendAndSend, this.msg, this.$rootScope);
+      this.router = new HeimdallrUiRouter(this.routeEventsArray, this.appendAndSend.bind(this), this.msg, this.$rootScope);
     }
     if (config.intervalTime) {
       this.intervalTime = config.intervalTime;
