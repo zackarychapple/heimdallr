@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Angular1 Heimdallr Example</title>
+</head>
+<html lang="en" class="no-js">
+<body>
+<div ui-view></div>
+<!-- We'll also add some navigation: -->
+<a ui-sref="state1">State 1</a>
+<a ui-sref="state2">State 2</a>
+
+<script src="https://code.angularjs.org/1.5.0/angular.min.js"></script>
+<script src="../../node_modules/angular-ui-router/release/angular-ui-router.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/0.19.22/system.js"></script>
+<script src="app.js"></script>
+
+
+<script>
+  System.config({
+    defaultJSExtensions: true,
+    depCache: {
+      'bootstrap': ['../../src/app/app2']
+    }
+  });
+  System.import('../../src/app/HeimdallrAngular1').then(function () {
+    System.import('bootstrap').then(function () {
+    });
+  });
+</script>
+
+</body>
+</html>
