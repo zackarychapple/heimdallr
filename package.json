@@ -1,6 +1,6 @@
 {
   "name": "heimdallr",
-  "version": "0.0.10",
+  "version": "0.1.0",
   "description": "Performance monitoring tool for angular based applications",
   "repository": {
     "type": "git",
@@ -30,6 +30,5 @@
     "typescript": "^1.8.2",
     "typings": "^0.6.8"
   },
-  "devDependencies": {
-  }
+  "devDependencies": {}
 }
