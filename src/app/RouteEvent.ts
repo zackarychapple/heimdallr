@@ -5,3 +5,9 @@ export class RouteEvent {
   fromParams:any;
   event:any;
 }
+
+export class ComponentRouteEvent {
+  next:any;
+  prev:any;
+  event:any;
+}

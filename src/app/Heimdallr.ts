@@ -3,6 +3,7 @@ import {BrowserPerformance} from "./BrowserPerformance";
 import {HeimdallrHttp} from "./HeimdallrHttp";
 import {HeimdallrErrors} from "./HeimdallrErrors";
 import {HeimdallrUiRouter} from "./HeimdallrUiRouter";
+import {HeimdallrNgComponentRouter} from "./HeimdallrNgComponentRouter";
 import {Guid} from './Guid';
 import {RouteEvent} from "./RouteEvent";
 
@@ -22,7 +23,7 @@ export class Heimdallr {
   http:HeimdallrHttp = new HeimdallrHttp();
   intervalTime:number = 10000;
   rumData:PerformanceObject = new PerformanceObject();
-  routeEventsArray:Array<RouteEvent> = [];
+  routeEventsArray:Array<any> = [];
   url:string = '';
   router:any;
   $rootScope:ng.IRootScopeService;
@@ -62,14 +63,19 @@ export class Heimdallr {
 
   init(config:ConfigObj) {
     this.url = config.url;
-    if (config.router == 'ui.router') {
+    if (config.router === 'ui.router') {
       this.router = new HeimdallrUiRouter(this.routeEventsArray, this.appendAndSend.bind(this), this.msg, this.$rootScope);
+    }
+    if (config.router === 'ngComponentRouter') {
+      this.router = new HeimdallrNgComponentRouter(this.routeEventsArray, this.appendAndSend.bind(this), this.msg, this.$rootScope)
     }
     if (config.intervalTime) {
       this.intervalTime = config.intervalTime;
     }
     if (config.guid) {
       this.rumData.guid = config.guid;
+    } else {
+      this.rumData.guid = Guid.newGuid();
     }
     if (config.customProperties) {
       let props = config.customProperties;
@@ -97,15 +103,16 @@ export class Heimdallr {
     }
   }
 
-  performanceTest(testCount:number) {
-    let resultSpeedTotal:number = 0;
+  performanceTest(testCount?:number) {
     let host:string = window.location.host;
     let protocol:string = window.location.protocol;
-    let entries:Array<any> = this.bp.getEntries();
+    let entries:Array<any>;
     let speedTotal:number = 0;
 
-    if (entries.length > testCount) {
-      entries = entries.slice(0, testCount);
+    if (testCount && this.bp.getEntries().length > testCount) {
+      entries = this.bp.getEntries().slice(0, testCount);
+    } else {
+      entries = this.bp.getEntries()
     }
     entries.forEach(entry => {
       let url = entry.name;
@@ -113,10 +120,12 @@ export class Heimdallr {
       urlParser.href = url;
       if (urlParser.host === host && urlParser.protocol === protocol) {
         let fileSize = this.http.getSize(url);
-        speedTotal += (fileSize / 1024 / 1024) / (entry.duration / 1000 / 1000)
+        if (!isNaN(fileSize)) {
+          speedTotal += (fileSize / 1024 / 1024) / (entry.duration / 1000 / 1000);
+        }
       }
     });
-    this.rumData.downloadSpeed = Math.round((resultSpeedTotal / entries.length));
+    this.rumData.downloadSpeed = Math.round((speedTotal / entries.length));
   }
 
   sendStats(callback?) {

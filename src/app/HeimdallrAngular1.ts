@@ -8,6 +8,7 @@ export class CustomHeimdallr extends Heimdallr {
     super($rootScope);
     let watcherPush = ()=> {
       this.rumData.watcherCount = this.$rootScope.$$watchersCount;
+      this.rumData.angularVersion = angular.version.full;
     };
     this.customFunctions.push(watcherPush)
   }
